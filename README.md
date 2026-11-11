@@ -1,11 +1,4 @@
-# Taller 2: Análisis Estacional y Predicción de Alta Demanda (H&M)
 
-**Asignatura:** Ciencia de Datos 2  
-**Integrantes:**
-* Pedro Segovia — RUT 21672694-4 — C2
-* Aurelie Lorena Saliou — RUT ficticio 40017078-9 — C2
-
----
 
 ## 1. Objetivos del Proyecto
 
@@ -68,16 +61,3 @@ Ciencia-de-Datos-2/
     └── preprocesar.py       # Script en Python para agregación diaria y extracción de calendario
 ```
 
----
-
-## 4. Flujo de Trabajo y Tecnologías
-
-1. **Preprocesamiento Rápido (Python / Pandas):**
-   * Agrupa las más de 31.7 millones de compras de `transactions_train.csv` en una serie temporal compacta de ~734 registros (`demanda_diaria.csv`).
-   * Extrae las variables de calendario: `dia_semana_nombre`, `dia_semana_num`, `dia_mes`, `mes`, `es_fin_de_semana`.
-   * Calcula el Percentil 75 y genera la columna binaria `alta_demanda`.
-2. **Modelado y Visualización (KNIME Analytics Platform):**
-   * Carga del archivo limpio `data/processed/demanda_diaria.csv`.
-   * Partición de datos (entrenamiento / prueba).
-   * Entrenamiento del modelo con `Logistic Regression Learner`.
-   * Evaluación de desempeño con `Logistic Regression Predictor` y `Scorer`.
