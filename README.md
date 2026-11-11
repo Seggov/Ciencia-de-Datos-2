@@ -6,7 +6,44 @@
 
 ---
 
-## Objetivos
+## Transformación de Datos: Archivo Antiguo (3.5 GB) vs Archivo Nuevo (35 KB)
+
+En el archivo original de 3.5 GB cada fila correspondía a una prenda comprada, por lo que un solo día se repetía entre 40.000 y 50.000 veces. Para el objetivo del taller, se condensaron todas las compras de cada día en **1 sola fila resumen** con las características de calendario y la demanda diaria.
+
+Ejemplo real con el día **20 de octubre de 2018 (`2018-10-20`)**:
+
+### 1. Cómo se veía en el archivo antiguo de 3.5 GB (`transactions_train.csv`)
+Para ese solo día habían **40.517 filas repetidas** como estas:
+
+| t_dat | customer_id | article_id | price | sales_channel_id |
+| :---: | :---: | :---: | :---: | :---: |
+| `2018-10-20` | `000058a12d...` | `0663713001` | 0.0508 | 2 |
+| `2018-10-20` | `000058a12d...` | `0541518023` | 0.0304 | 2 |
+| `2018-10-20` | `00007d2de8...` | `0505221004` | 0.0152 | 2 |
+| `2018-10-20` | `00083cda04...` | `0688873012` | 0.0304 | 1 |
+| ... *(así 40.517 veces hacia abajo)* | ... | ... | ... | ... |
+
+*(Tener 40.000 filas diciendo lo mismo sobre el calendario congelaría KNIME y distorsionaría el modelo).*
+
+---
+
+### 2. Cómo quedó en el archivo nuevo de 35 KB (`demanda_diaria.csv`)
+Esas 40.517 filas se condensaron en **1 sola fila resumen**:
+
+| fecha | demanda_diaria | dia_semana_num | dia_semana_nombre | dia_mes | mes | es_fin_de_semana | alta_demanda |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **`2018-10-20`** | **`40517`** | `6` | `Sabado` | `20` | `10` | `1` | **`0`** |
+
+* **`demanda_diaria = 40517`**: Es el conteo exacto de todas las compras ocurridas ese día.
+* **`dia_semana_nombre = Sabado`** y **`dia_semana_num = 6`**: Extraído de la fecha.
+* **`dia_mes = 20`**: Día 20 del mes.
+* **`mes = 10`**: Octubre.
+* **`es_fin_de_semana = 1`**: Porque fue sábado.
+* **`alta_demanda = 0`**: Porque 40.517 estuvo por debajo del percentil 75 ($47.447,50$).
+
+---
+
+## Objetivos del Proyecto
 
 ### Objetivo general:
 Analizar los patrones estacionales de las compras y estimar, mediante regresión logística, la probabilidad de que un día sea de alta demanda según sus características de calendario.
